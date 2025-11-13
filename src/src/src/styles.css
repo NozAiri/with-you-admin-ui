@@ -1,0 +1,208 @@
+/* =========================================
+   Global theme
+========================================= */
+:root {
+  --bg-dark: #0e1117;
+  --bg-card: rgba(255, 255, 255, 0.06);
+  --bg-card-strong: rgba(255, 255, 255, 0.12);
+  --accent-blue: #4ea3f1;
+  --accent-pink: #ff6ec7;
+  --accent-purple: #9c6bff;
+  --text-main: #ffffff;
+  --text-sub: #c7c7c7;
+  --radius: 16px;
+  --blur: 14px;
+  --transition: 0.25s ease;
+}
+
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--bg-dark);
+  font-family: "Inter", "Noto Sans JP", sans-serif;
+  color: var(--text-main);
+  padding: 0;
+  margin: 0;
+}
+
+/* =========================================
+   Layout
+========================================= */
+.dashboard-container {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  padding: 32px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* =========================================
+   Glass Card (共通)
+========================================= */
+.card {
+  background: var(--bg-card);
+  backdrop-filter: blur(var(--blur));
+  padding: 24px;
+  border-radius: var(--radius);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: var(--transition);
+}
+
+.card:hover {
+  background: var(--bg-card-strong);
+}
+
+/* =========================================
+   Section Titles
+========================================= */
+.section-title {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  color: var(--accent-blue);
+}
+
+/* =========================================
+   Charts
+========================================= */
+.chart-container {
+  width: 100%;
+  height: 320px;
+  padding: 12px;
+}
+
+/* =========================================
+   Heatmap Table
+========================================= */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 16px;
+}
+
+.table th {
+  text-align: left;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-sub);
+  font-weight: 500;
+}
+
+.table td {
+  padding: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  color: var(--text-main);
+}
+
+/* Heatmap intensity */
+.heat-low {
+  background-color: rgba(78, 163, 241, 0.15);   /* blue */
+}
+
+.heat-mid {
+  background-color: rgba(156, 107, 255, 0.15);  /* purple */
+}
+
+.heat-high {
+  background-color: rgba(255, 110, 199, 0.18);  /* pink */
+}
+
+/* =========================================
+   Sidebar (optional)
+========================================= */
+.sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100vh;
+  width: 80px;
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(18px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 24px;
+  gap: 28px;
+  border-right: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.sidebar-icon {
+  width: 28px;
+  height: 28px;
+  opacity: 0.75;
+  transition: var(--transition);
+}
+
+.sidebar-icon:hover {
+  opacity: 1;
+  transform: scale(1.08);
+}
+
+/* =========================================
+   Dashboard Header
+========================================= */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0 20px 0;
+}
+
+.header-title {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--text-main);
+}
+
+.header-date {
+  font-size: 16px;
+  color: var(--text-sub);
+}
+
+/* =========================================
+   Summary Stat Cards (上のメイン統計)
+========================================= */
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.stat-card {
+  background: linear-gradient(125deg, rgba(78,163,241,0.15), rgba(156,107,255,0.15));
+  border-radius: var(--radius);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: var(--transition);
+  border: 1px solid rgba(255,255,255,0.05);
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(125deg, rgba(78,163,241,0.22), rgba(156,107,255,0.22));
+}
+
+.stat-value {
+  font-size: 34px;
+  font-weight: 700;
+}
+
+.stat-label {
+  font-size: 14px;
+  color: var(--text-sub);
+}
+
+/* =========================================
+   Table Rows Hover
+========================================= */
+.table tr:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
