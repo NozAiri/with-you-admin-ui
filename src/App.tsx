@@ -8,9 +8,8 @@ import './App.css';
 
 // ダッシュボードページ（既存のコンポーネント）
 function DashboardPage() {
-  const groupId = '';
+  const groupId = '4c88b2eb878ccc49d303f1267707971c758426eadd304071117e34fc8143d197';
   const data = useFirestoreSimple(groupId);
-
   if (data.loading) {
     return (
       <div className="loading-container">
