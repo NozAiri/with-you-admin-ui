@@ -321,8 +321,9 @@ export function useFirestoreSimple(groupId: string) {
     lowMoodRateByClass: [],
   });
 
-  useEffect(() => {
-    if (!groupId) return;
+useEffect(() => {
+  // groupIdが undefined の場合のみ return（空文字は許可）
+  if (groupId === undefined) return;
 
     const fetchData = async () => {
       try {
