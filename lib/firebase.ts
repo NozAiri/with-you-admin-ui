@@ -13,14 +13,24 @@ const firebaseConfig = {
   appId: import.meta.env.VITE_FIREBASE_APP_ID,
 };
 
-// Firebase初期化
-export const app = initializeApp(firebaseConfig);
-export const db = getFirestore(app);
-export const auth = getAuth(app);
-
-// 環境変数チェック（開発時のみ）
-if (import.meta.env.DEV && !firebaseConfig.projectId) {
-  console.warn(
-    "⚠️ Firebase環境変数が設定されていません。.env.localファイルを作成してください。"
-  );
+// Firebase初期化エラーチェック
+if (!firebaseConfig.projectId) {
+  console.error("❌ Firebase環境変数が設定されていません。");
+  console.error("設定を確認してください:", firebaseConfig);
 }
+
+// Firebase初期化
+let app;
+let db;
+let auth;
+
+try {
+  app = initializeApp(firebaseConfig);
+  db = getFirestore(app);
+  auth = getAuth(app);
+  console.log("✅ Firebase初期化成功:", firebaseConfig.projectId);
+} catch (error) {
+  console.error("❌ Firebase初期化エラー:", error);
+}
+
+export { app, db, auth };
