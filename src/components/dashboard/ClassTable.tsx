@@ -1,6 +1,15 @@
 // src/components/dashboard/ClassTable.tsx
 import React from "react";
-import { ClassRow } from "../../types";
+
+// 型定義をファイル内で定義
+interface ClassRow {
+  classId: string;
+  className: string;
+  lastMood: string;
+  avgSleepHours: number;
+  lowMoodCount: number;
+  urgentCount: number;
+}
 
 interface ClassTableProps {
   data: ClassRow[];
