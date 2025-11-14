@@ -1,7 +1,6 @@
 import React from 'react';
 import { collection, query, getDocs, Timestamp } from 'firebase/firestore';
-import { db } from '../lib/firebase';
-
+import { db } from '../../lib/firebase';
 interface ConsultMessage {
   id: string;
   ts: Timestamp;
