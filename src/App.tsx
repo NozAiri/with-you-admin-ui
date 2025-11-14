@@ -1,6 +1,7 @@
 // src/App.tsx - 全コンポーネント統合版
 import React from "react";
 import { useState } from "react";
+import { useFirestoreSimple } from "./hooks/useFirestoreSimple";
 import type { SummaryStat, HeatmapCell, ClassRow } from "./types";
 
 // LoadingSpinner コンポーネント
@@ -215,8 +216,8 @@ const ClassTable: React.FC<ClassTableProps> = ({ data }) => {
 // メインの App コンポーネント
 const App: React.FC = () => {
 const [timeRange, setTimeRange] = useState<"7d" | "30d">("30d");
-const data = null;
-const isLoading = false;
+const { data, isLoading } = useFirestoreSimple(timeRange);
+
   if (isLoading || !data) {
     return <LoadingSpinner />;
   }
