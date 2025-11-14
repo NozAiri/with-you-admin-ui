@@ -348,8 +348,9 @@ const moodQuery = groupId
         // 2. 相談メッセージ取得（全履歴）
         // ===========================
         const consultRef = collection(db, 'consult_msgs');
-        const consultQuery = query(consultRef, where('group_id', '==', groupId));
-        const consultSnapshot = await getDocs(consultQuery);
+const consultQuery = groupId
+  ? query(consultRef, where('group_id', '==', groupId))
+  : query(consultRef);        const consultSnapshot = await getDocs(consultQuery);
 
         const allConsultDocs: ConsultDoc[] = [];
         consultSnapshot.forEach(doc => {
