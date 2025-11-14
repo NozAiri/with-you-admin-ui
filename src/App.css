@@ -1,0 +1,484 @@
+/* ===========================
+   グローバルスタイル
+   =========================== */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+  background: #0f172a;
+  color: #e2e8f0;
+}
+
+/* ===========================
+   レイアウト
+   =========================== */
+
+.app-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* サイドバー */
+.sidebar {
+  width: 280px;
+  background: #1e293b;
+  padding: 2rem 1.5rem;
+  border-right: 1px solid #334155;
+}
+
+.logo h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #60a5fa;
+  margin-bottom: 2rem;
+}
+
+.nav-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.nav-item {
+  padding: 0.875rem 1rem;
+  border-radius: 0.5rem;
+  color: #cbd5e1;
+  text-decoration: none;
+  transition: all 0.2s;
+  font-size: 0.95rem;
+}
+
+.nav-item:hover {
+  background: #334155;
+  color: #f1f5f9;
+}
+
+.nav-item.active {
+  background: #3b82f6;
+  color: white;
+  font-weight: 600;
+}
+
+/* メインコンテンツ */
+.main-content {
+  flex: 1;
+  padding: 2rem 3rem;
+  overflow-y: auto;
+}
+
+.page-header {
+  margin-bottom: 2rem;
+}
+
+.page-header h2 {
+  font-size: 1.875rem;
+  font-weight: 700;
+  color: #f1f5f9;
+  margin-bottom: 0.5rem;
+}
+
+.subtitle {
+  color: #94a3b8;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+/* ===========================
+   サマリーカード
+   =========================== */
+
+.summary-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2.5rem;
+}
+
+.card {
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
+
+.card-warning {
+  border-color: #f59e0b;
+  background: linear-gradient(135deg, #1e293b 0%, #292524 100%);
+}
+
+.card-header {
+  font-size: 0.875rem;
+  color: #94a3b8;
+  margin-bottom: 0.75rem;
+  font-weight: 500;
+}
+
+.card-value {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #f1f5f9;
+  margin-bottom: 0.5rem;
+}
+
+.card-note {
+  font-size: 0.8rem;
+  color: #64748b;
+}
+
+/* 要フォロー内訳 */
+.card-breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.level-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.level-badge {
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.level-count {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #f1f5f9;
+}
+
+.level-1 {
+  border-left: 3px solid #ef4444;
+}
+
+.level-2 {
+  border-left: 3px solid #f59e0b;
+}
+
+.level-3 {
+  border-left: 3px solid #3b82f6;
+}
+
+/* ===========================
+   ヒートマップ
+   =========================== */
+
+.heatmap-section,
+.class-summary-section {
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 1rem;
+  padding: 2rem;
+  margin-bottom: 2rem;
+}
+
+.heatmap-section h3,
+.class-summary-section h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #f1f5f9;
+  margin-bottom: 0.5rem;
+}
+
+.section-description {
+  color: #94a3b8;
+  font-size: 0.9rem;
+  margin-bottom: 1.5rem;
+}
+
+.heatmap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.heatmap-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.heatmap-label {
+  min-width: 100px;
+  font-weight: 600;
+  color: #cbd5e1;
+  font-size: 0.95rem;
+}
+
+.heatmap-bar-container {
+  flex: 1;
+  height: 36px;
+  background: #0f172a;
+  border-radius: 0.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.heatmap-bar {
+  height: 100%;
+  transition: width 0.3s ease;
+  border-radius: 0.5rem;
+}
+
+.heatmap-value {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-weight: 700;
+  color: #f1f5f9;
+  font-size: 0.9rem;
+}
+
+/* ===========================
+   クラステーブル
+   =========================== */
+
+.class-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+.class-table thead {
+  background: #0f172a;
+}
+
+.class-table th {
+  padding: 1rem;
+  text-align: left;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #94a3b8;
+  border-bottom: 2px solid #334155;
+}
+
+.class-table tbody tr {
+  border-bottom: 1px solid #334155;
+  transition: background 0.2s;
+}
+
+.class-table tbody tr:hover {
+  background: #0f172a;
+}
+
+.class-table td {
+  padding: 1rem;
+  color: #cbd5e1;
+  font-size: 0.95rem;
+}
+
+.class-name {
+  font-weight: 600;
+  color: #f1f5f9;
+}
+
+.mood-cell {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.mood-emoji {
+  font-size: 1.5rem;
+}
+
+.mood-label {
+  color: #94a3b8;
+  font-size: 0.875rem;
+}
+
+/* フォローステータスバッジ */
+.follow-status {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  display: inline-block;
+}
+
+.badge-urgent {
+  background: rgba(239, 68, 68, 0.2);
+  color: #fca5a5;
+  border: 1px solid #dc2626;
+}
+
+.badge-warning {
+  background: rgba(245, 158, 11, 0.2);
+  color: #fcd34d;
+  border: 1px solid #f59e0b;
+}
+
+.badge-info {
+  background: rgba(59, 130, 246, 0.2);
+  color: #93c5fd;
+  border: 1px solid #3b82f6;
+}
+
+.no-follow {
+  color: #10b981;
+  font-size: 0.875rem;
+}
+
+/* ===========================
+   エビデンスセクション
+   =========================== */
+
+.evidence-section {
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  margin-top: 2rem;
+}
+
+.evidence-section details {
+  cursor: pointer;
+}
+
+.evidence-section summary {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #60a5fa;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  transition: background 0.2s;
+}
+
+.evidence-section summary:hover {
+  background: #0f172a;
+}
+
+.evidence-content {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background: #0f172a;
+  border-radius: 0.5rem;
+}
+
+.evidence-content h4 {
+  font-size: 1.125rem;
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+  color: #f1f5f9;
+}
+
+.evidence-content h4:first-child {
+  margin-top: 0;
+}
+
+.evidence-content ul {
+  padding-left: 1.5rem;
+  color: #cbd5e1;
+  line-height: 1.8;
+}
+
+.evidence-content li {
+  margin-bottom: 0.5rem;
+}
+
+.evidence-note {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background: rgba(59, 130, 246, 0.1);
+  border-left: 3px solid #3b82f6;
+  color: #94a3b8;
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+/* ===========================
+   ローディング
+   =========================== */
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: #0f172a;
+}
+
+.spinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid #334155;
+  border-top-color: #3b82f6;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loading-container p {
+  margin-top: 1rem;
+  color: #94a3b8;
+  font-size: 0.95rem;
+}
+
+/* ===========================
+   レスポンシブ
+   =========================== */
+
+@media (max-width: 1024px) {
+  .summary-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .app-container {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid #334155;
+  }
+
+  .main-content {
+    padding: 1.5rem;
+  }
+
+  .summary-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .class-table {
+    font-size: 0.85rem;
+  }
+
+  .class-table th,
+  .class-table td {
+    padding: 0.75rem 0.5rem;
+  }
+}
