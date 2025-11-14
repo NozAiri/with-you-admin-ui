@@ -330,11 +330,9 @@ export function useFirestoreSimple(groupId: string) {
         // 1. 気分・睡眠データ取得（全履歴）
         // ===========================
         const moodRef = collection(db, 'school_share');
-        // group_id が空の場合はフィルタしない
-const moodQuery = groupId 
-  ? query(moodRef, where('group_id', '==', groupId))
-  : query(moodRef);
-        const moodSnapshot = await getDocs(moodQuery);
+// group_idが空の場合はフィルタしない（全データ取得）
+const moodQuery = groupId ? query(moodRef, where('group_id', '==', groupId)) : query(moodRef);
+const moodSnapshot = await getDocs(moodQuery);
 
         const allMoodDocs: MoodDoc[] = [];
         moodSnapshot.forEach(doc => {
@@ -348,9 +346,9 @@ const moodQuery = groupId
         // 2. 相談メッセージ取得（全履歴）
         // ===========================
         const consultRef = collection(db, 'consult_msgs');
-const consultQuery = groupId
-  ? query(consultRef, where('group_id', '==', groupId))
-  : query(consultRef);        const consultSnapshot = await getDocs(consultQuery);
+// group_idが空の場合はフィルタしない（全データ取得）
+const consultQuery = groupId ? query(consultRef, where('group_id', '==', groupId)) : query(consultRef);
+const consultSnapshot = await getDocs(consultQuery);
 
         const allConsultDocs: ConsultDoc[] = [];
         consultSnapshot.forEach(doc => {
