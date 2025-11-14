@@ -1,249 +1,217 @@
-// src/App.tsx - 全コンポーネント統合版
-import React from "react";
-import { useState } from "react";
-import { useFirestoreSimple } from "./hooks/useFirestoreSimple";
-import type { SummaryStat, HeatmapCell, ClassRow } from "./types";
+import React from 'react';
+import { useFirestoreSimple } from './hooks/useFirestoreSimple';
+import './App.css';
 
-// LoadingSpinner コンポーネント
-const LoadingSpinner: React.FC = () => {
-  return (
-    <div className="app-root">
-      <div className="app-layout">
-        <aside className="sidebar">
-          <div className="sidebar-logo">With You</div>
-        </aside>
-        <main className="main">
-          <div className="main-header">
-            <h1>ダッシュボード</h1>
-            <p className="muted">データを読み込み中です...</p>
-          </div>
-          <div style={{ 
-            display: "flex", 
-            justifyContent: "center", 
-            alignItems: "center", 
-            minHeight: "400px" 
-          }}>
-            <div className="loading-spinner" />
-          </div>
-        </main>
+function App() {
+  // ダミーのgroup_id（実際は認証から取得）
+  const groupId = 'test-group-id';
+  const data = useFirestoreSimple(groupId);
+
+  if (data.loading) {
+    return (
+      <div className="loading-container">
+        <div className="spinner"></div>
+        <p>データを読み込み中...</p>
       </div>
-    </div>
-  );
-};
+    );
+  }
 
-// Sidebar コンポーネント
-const Sidebar: React.FC = () => {
+  // 要フォロー総数
+  const totalNeedsFollow = data.needsFollowUp.level1 + data.needsFollowUp.level2 + data.needsFollowUp.level3;
+
   return (
-    <aside className="sidebar">
-      <div className="sidebar-logo">With You</div>
-      <nav className="sidebar-nav">
-        <button className="nav-item nav-item-active">
-          <span className="nav-dot" />
-          ダッシュボード
-        </button>
-        <button className="nav-item">クラス一覧</button>
-        <button className="nav-item">相談リクエスト</button>
-        <button className="nav-item">設定</button>
-      </nav>
-      <div className="sidebar-footer">
-        <p className="sidebar-caption">
-          データはすべて
-          <br />
-          匿名で集計されています。
-        </p>
-      </div>
-    </aside>
-  );
-};
-
-// Header コンポーネント
-interface HeaderProps {
-  timeRange: "7d" | "30d";
-  setTimeRange: (range: "7d" | "30d") => void;
-  updatedAt: string;
-}
-
-const Header: React.FC<HeaderProps> = ({ timeRange, setTimeRange, updatedAt }) => {
-  return (
-    <header className="main-header">
-      <div>
-        <h1>Heatmap(クラス/学年の傾向・匿名)</h1>
-        <p className="muted">
-          「今日を伝える」「相談する」から送られたデータをもとに、
-          クラスごとの傾向をざっくり把握するための画面です。
-        </p>
-      </div>
-      <div className="header-right">
-        <div className="time-range-toggle">
-          <button
-            className={timeRange === "7d" ? "pill pill-active" : "pill"}
-            onClick={() => setTimeRange("7d")}
-          >
-            直近7日
-          </button>
-          <button
-            className={timeRange === "30d" ? "pill pill-active" : "pill"}
-            onClick={() => setTimeRange("30d")}
-          >
-            直近30日
-          </button>
+    <div className="app-container">
+      {/* サイドバー */}
+      <aside className="sidebar">
+        <div className="logo">
+          <h1>With You.</h1>
         </div>
-        <div className="updated-at">{updatedAt}</div>
-      </div>
-    </header>
-  );
-};
+        <nav className="nav-menu">
+          <a href="#dashboard" className="nav-item active">
+            📊 ダッシュボード
+          </a>
+          <a href="#classes" className="nav-item">
+            📚 クラス一覧
+          </a>
+          <a href="#consults" className="nav-item">
+            💬 相談リクエスト
+          </a>
+          <a href="#settings" className="nav-item">
+            ⚙️ 設定
+          </a>
+        </nav>
+      </aside>
 
-// SummaryCards コンポーネント
-interface SummaryCardsProps {
-  stats: SummaryStat[];
-}
+      {/* メインコンテンツ */}
+      <main className="main-content">
+        <header className="page-header">
+          <h2>Heatmap（クラス/学年の傾向・匿名）</h2>
+          <p className="subtitle">
+            「今日を伝える」「相談する」から送られたデータをもとに、クラスごとの傾向をざっくり把握するための画面です。
+          </p>
+        </header>
 
-const SummaryCards: React.FC<SummaryCardsProps> = ({ stats }) => {
-  return (
-    <section className="section">
-      <div className="card-grid">
-        {stats.map((s) => (
-          <article key={s.id} className="card">
-            <div className="card-label">{s.label}</div>
-            <div className="card-value">{s.value}</div>
-            <div className="card-sub">
-              {s.subLabel && <span>{s.subLabel}</span>}
-              {s.trend && (
-                <span className="card-trend">
-                  {s.trendLabel} {s.trend}
-                </span>
-              )}
-            </div>
-          </article>
-        ))}
-      </div>
-    </section>
-  );
-};
+        {/* サマリーカード */}
+        <div className="summary-cards">
+          <div className="card">
+            <div className="card-header">利用生徒数</div>
+            <div className="card-value">{data.totalStudents}</div>
+            <div className="card-note">アカウント登録済み</div>
+          </div>
 
-// Heatmap コンポーネント
-interface HeatmapProps {
-  data: HeatmapCell[];
-}
-
-const Heatmap: React.FC<HeatmapProps> = ({ data }) => {
-  return (
-    <section className="panel">
-      <div className="panel-header">
-        <h2>低気分率ヒートマップ</h2>
-        <p className="muted small">
-          濃いほど「しんどい」と答えた生徒の割合が高いクラスです。
-        </p>
-      </div>
-      <div className="heat-table">
-        <div className="heat-header-row">
-          <div className="heat-cell head">クラス</div>
-          <div className="heat-cell head">低気分の割合</div>
-        </div>
-        {data.map((c) => (
-          <div key={c.classId} className="heat-row">
-            <div className="heat-cell">{c.className}</div>
-            <div className="heat-cell">
-              <div className="heatbar-wrapper">
-                <div
-                  className="heatbar"
-                  style={{ width: `${c.lowMoodRate * 100}%` }}
-                />
-                <span className="heatbar-label">
-                  {(c.lowMoodRate * 100).toFixed(0)}%
-                </span>
+          <div className="card card-warning">
+            <div className="card-header">要フォロー生徒</div>
+            <div className="card-value">{totalNeedsFollow}</div>
+            <div className="card-breakdown">
+              <div className="level-item level-1">
+                <span className="level-badge">🔴 緊急</span>
+                <span className="level-count">{data.needsFollowUp.level1}人</span>
+              </div>
+              <div className="level-item level-2">
+                <span className="level-badge">🟡 注意</span>
+                <span className="level-count">{data.needsFollowUp.level2}人</span>
+              </div>
+              <div className="level-item level-3">
+                <span className="level-badge">🔵 様子見</span>
+                <span className="level-count">{data.needsFollowUp.level3}人</span>
               </div>
             </div>
           </div>
-        ))}
-      </div>
-    </section>
-  );
-};
 
-// ClassTable コンポーネント
-interface ClassTableProps {
-  data: ClassRow[];
-}
-
-const ClassTable: React.FC<ClassTableProps> = ({ data }) => {
-  return (
-    <section className="panel">
-      <div className="panel-header">
-        <h2>クラス別サマリー</h2>
-        <p className="muted small">
-          「要フォロー生徒数」や「睡眠時間」など、クラスごとのざっくり傾向です。
-          個人名は表示されません。
-        </p>
-      </div>
-      <div className="table-wrapper">
-        <table className="data-table">
-          <thead>
-            <tr>
-              <th>クラス</th>
-              <th>最近のようす</th>
-              <th>平均睡眠時間</th>
-              <th>しんどい生徒</th>
-              <th>要フォロー</th>
-            </tr>
-          </thead>
-          <tbody>
-            {data.map((row) => (
-              <tr key={row.classId}>
-                <td>{row.className}</td>
-                <td>{row.lastMood}</td>
-                <td>{row.avgSleepHours.toFixed(1)} h</td>
-                <td>{row.lowMoodCount} 人</td>
-                <td>
-                  {row.urgentCount > 0 ? (
-                    <span className="badge badge-danger">
-                      要フォロー {row.urgentCount} 人
-                    </span>
-                  ) : (
-                    <span className="badge badge-safe">特になし</span>
-                  )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </section>
-  );
-};
-
-// メインの App コンポーネント
-const App: React.FC = () => {
-const [timeRange, setTimeRange] = useState<"7d" | "30d">("30d");
-const { data, isLoading } = useFirestoreSimple(timeRange);
-
-  if (isLoading || !data) {
-    return <LoadingSpinner />;
-  }
-
-  return (
-    <div className="app-root">
-      <div className="app-layout">
-        <Sidebar />
-
-        <main className="main">
-          <Header
-            timeRange={timeRange}
-            setTimeRange={setTimeRange}
-            updatedAt={data.updatedAt}
-          />
-
-          <SummaryCards stats={data.summaryStats} />
-
-          <div className="section section-grid">
-            <Heatmap data={data.heatmap} />
-            <ClassTable data={data.classTable} />
+          <div className="card">
+            <div className="card-header">相談リクエスト</div>
+            <div className="card-value">{data.consultRequests}</div>
           </div>
-        </main>
-      </div>
+
+          <div className="card">
+            <div className="card-header">平均睡眠時間</div>
+            <div className="card-value">{data.averageSleepHours.toFixed(1)} h</div>
+          </div>
+        </div>
+
+        {/* 低気分率ヒートマップ */}
+        <section className="heatmap-section">
+          <h3>低気分率ヒートマップ</h3>
+          <p className="section-description">
+            濃いほどしんどいと答えた生徒の割合が高いクラスです。
+          </p>
+          <div className="heatmap">
+            {data.lowMoodRateByClass.map(cls => (
+              <div key={cls.classId} className="heatmap-row">
+                <div className="heatmap-label">{cls.classId}</div>
+                <div className="heatmap-bar-container">
+                  <div
+                    className="heatmap-bar"
+                    style={{
+                      width: `${cls.lowMoodRate}%`,
+                      backgroundColor: getHeatmapColor(cls.lowMoodRate),
+                    }}
+                  ></div>
+                  <span className="heatmap-value">{cls.lowMoodRate.toFixed(0)}%</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* クラス別サマリー */}
+        <section className="class-summary-section">
+          <h3>クラス別サマリー</h3>
+          <p className="section-description">
+            「要フォロー生徒数」や「睡眠時間」など、クラスごとのざっくり傾向です。個人名は表示されません。
+          </p>
+          <table className="class-table">
+            <thead>
+              <tr>
+                <th>クラス</th>
+                <th>最近のようす</th>
+                <th>平均睡眠時間</th>
+                <th>しんどい生徒</th>
+                <th>要フォロー</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data.classSummary.map(cls => (
+                <tr key={cls.classId}>
+                  <td className="class-name">{cls.classId}</td>
+                  <td className="mood-cell">
+                    <span className="mood-emoji">{cls.recentMood}</span>
+                    <span className="mood-label">{cls.moodLabel}</span>
+                  </td>
+                  <td>{cls.avgSleep.toFixed(1)} h</td>
+                  <td>{cls.needsFollowStudents.filter(s => s.level === 'level1' || s.level === 'level2').length}人</td>
+                  <td>
+                    {cls.needsFollowCount > 0 ? (
+                      <div className="follow-status">
+                        {cls.needsFollowStudents.filter(s => s.level === 'level1').length > 0 && (
+                          <span className="badge badge-urgent">🔴 緊急{cls.needsFollowStudents.filter(s => s.level === 'level1').length}人</span>
+                        )}
+                        {cls.needsFollowStudents.filter(s => s.level === 'level2').length > 0 && (
+                          <span className="badge badge-warning">🟡 注意{cls.needsFollowStudents.filter(s => s.level === 'level2').length}人</span>
+                        )}
+                        {cls.needsFollowStudents.filter(s => s.level === 'level3').length > 0 && (
+                          <span className="badge badge-info">🔵 様子見{cls.needsFollowStudents.filter(s => s.level === 'level3').length}人</span>
+                        )}
+                      </div>
+                    ) : (
+                      <span className="no-follow">特になし</span>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </section>
+
+        {/* エビデンス表示 */}
+        <section className="evidence-section">
+          <details>
+            <summary>📚 スクリーニング基準について（臨床的根拠）</summary>
+            <div className="evidence-content">
+              <h4>🔴 レベル1: 緊急対応が必要</h4>
+              <ul>
+                <li>リスクレベルが「緊急」</li>
+                <li>相談メッセージに危険ワード（"死にたい", "消えたい"など）</li>
+                <li>気分😟 かつ 睡眠4時間未満（重度睡眠障害）</li>
+                <li>身体症状3つ以上 + 気分😟（抑うつリスク11.3倍）*</li>
+                <li>身体症状4つ全て（抑うつリスク16.4倍）*</li>
+              </ul>
+
+              <h4>🟡 レベル2: 注意が必要（週次確認推奨）</h4>
+              <ul>
+                <li>3日連続で気分😟</li>
+                <li>1週間で気分😟が5日以上</li>
+                <li>3日連続で睡眠5時間未満</li>
+                <li>身体症状2つ（抑うつリスク7.1倍）*</li>
+                <li>過眠 + 抑うつ（回避行動の可能性）**</li>
+                <li>相談リクエスト未対応で3日経過</li>
+              </ul>
+
+              <h4>🔵 レベル3: 様子見（月次モニタリング）</h4>
+              <ul>
+                <li>気分😟が単発</li>
+                <li>睡眠5-6時間（やや短い）</li>
+                <li>身体症状1つ（抑うつリスク2.7倍）*</li>
+              </ul>
+
+              <p className="evidence-note">
+                * 国立成育医療研究センター研究（2025）: 頭痛・腹痛・背部痛・めまいの身体症状数と抑うつリスクの相関<br />
+                ** 行動活性化療法の視点: 過眠は不快な感情からの回避行動の可能性
+              </p>
+            </div>
+          </details>
+        </section>
+      </main>
     </div>
   );
-};
+}
+
+// ヒートマップの色を計算
+function getHeatmapColor(rate: number): string {
+  if (rate >= 75) return '#dc2626'; // 赤
+  if (rate >= 50) return '#f97316'; // オレンジ
+  if (rate >= 25) return '#fbbf24'; // 黄色
+  return '#10b981'; // 緑
+}
 
 export default App;
