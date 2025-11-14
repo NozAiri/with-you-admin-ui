@@ -330,7 +330,10 @@ export function useFirestoreSimple(groupId: string) {
         // 1. 気分・睡眠データ取得（全履歴）
         // ===========================
         const moodRef = collection(db, 'school_share');
-        const moodQuery = query(moodRef, where('group_id', '==', groupId));
+        // group_id が空の場合はフィルタしない
+const moodQuery = groupId 
+  ? query(moodRef, where('group_id', '==', groupId))
+  : query(moodRef);
         const moodSnapshot = await getDocs(moodQuery);
 
         const allMoodDocs: MoodDoc[] = [];
