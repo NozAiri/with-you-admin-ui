@@ -245,14 +245,3 @@ const App: React.FC = () => {
 };
 
 export default App;
-```
-
----
-
-## ✅ 貼り付けたら:
-
-1. **「Commit changes」をクリック**
-2. **2分待つ**
-3. **サイトにアクセス:**
-```
-   https://with-you-admin-ui.vercel.app
