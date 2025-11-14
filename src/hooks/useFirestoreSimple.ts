@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { collection, query, where, getDocs, Timestamp } from 'firebase/firestore';
-import { db } from '../firebase';
-
+import { db } from '../../lib/firebase';
 // ===========================
 // 型定義
 // ===========================
