@@ -12,14 +12,3 @@ interface ImportMetaEnv {
 interface ImportMeta {
   readonly env: ImportMetaEnv
 }
-```
-
-6. コミット：`fix: Vite型定義追加`
-
----
-
-## 🔧 修正2：SummaryCards.tsx がまだ古いimportを持っている
-
-エラーメッセージ：
-```
-src/components/dashboard/SummaryCards.tsx(3,29): error TS2307: Cannot find module '../../types'
