@@ -1,6 +1,15 @@
 // src/components/dashboard/SummaryCards.tsx
 import React from "react";
-import { SummaryStat } from "../../types";
+
+// 型定義をファイル内で定義
+interface SummaryStat {
+  id: string;
+  label: string;
+  value: string | number;
+  subLabel?: string;
+  trend?: string;
+  trendLabel?: string;
+}
 
 interface SummaryCardsProps {
   stats: SummaryStat[];
