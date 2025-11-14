@@ -1,6 +1,8 @@
 // src/components/layout/Header.tsx
 import React from "react";
-import { TimeRange } from "../../types";
+
+// 型定義をファイル内で定義
+type TimeRange = "7d" | "30d";
 
 interface HeaderProps {
   timeRange: TimeRange;
