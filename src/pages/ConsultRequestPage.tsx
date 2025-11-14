@@ -1,6 +1,5 @@
 import React from 'react';
-import { collection, query, getDocs, Timestamp } from 'firebase/firestore';
-import { db } from '../../lib/firebase';
+import { collection, query, where, getDocs, Timestamp } from 'firebase/firestore';import { db } from '../../lib/firebase';
 interface ConsultMessage {
   id: string;
   ts: Timestamp;
@@ -21,7 +20,7 @@ export default function ConsultRequestPage() {
     const fetchConsults = async () => {
       try {
         const consultRef = collection(db, 'consult_msgs');
-        const consultQuery = query(consultRef);
+const consultQuery = query(consultRef, where('group_id', '==', '4c88b2eb878ccc49d303f1267707971c758426eadd304071117e34fc8143d197'));
         const snapshot = await getDocs(consultQuery);
         
         const data: ConsultMessage[] = [];
