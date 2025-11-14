@@ -4,7 +4,7 @@ import './App.css';
 
 function App() {
   // ダミーのgroup_id（実際は認証から取得）
-  const groupId = 'test-group-id';
+const groupId = ''; // 空文字
   const data = useFirestoreSimple(groupId);
 
   if (data.loading) {
