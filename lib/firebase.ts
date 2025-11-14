@@ -1,7 +1,7 @@
-// src/lib/firebase.ts
+// lib/firebase.ts
 import { initializeApp } from "firebase/app";
-import { getFirestore } from "firebase/firestore";
-import { getAuth } from "firebase/auth";
+import { getFirestore, Firestore } from "firebase/firestore";
+import { getAuth, Auth } from "firebase/auth";
 
 // 環境変数から取得（Vercelの環境変数設定で追加する）
 const firebaseConfig = {
@@ -21,8 +21,8 @@ if (!firebaseConfig.projectId) {
 
 // Firebase初期化
 let app;
-let db;
-let auth;
+let db: Firestore | undefined;
+let auth: Auth | undefined;
 
 try {
   app = initializeApp(firebaseConfig);
